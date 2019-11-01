@@ -112,11 +112,11 @@ const BaseMultilevelDropdown: React.FunctionComponent<
     setAnchorEl(null);
   }
 
-  const handleClickListItem = (event: React.MouseEvent<HTMLElement>, setAnchorEl: any) => {
+  const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   }
 
-  const handleClose = (setAnchorEl: any) => {
+  const handleClose = () => {
     setAnchorEl(null);
   }
 
@@ -128,7 +128,7 @@ const BaseMultilevelDropdown: React.FunctionComponent<
           aria-haspopup="true"
           aria-controls="lock-menu"
           aria-label={label}
-          onClick={e => handleClickListItem(e, setAnchorEl)}
+          onClick={e => handleClickListItem(e)}
         >
           <ListItemText
             primary={label}
@@ -141,7 +141,7 @@ const BaseMultilevelDropdown: React.FunctionComponent<
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={() => handleClose(setAnchorEl)}
+        onClose={() => handleClose()}
       >
         {composeOptionMenu(
           options,
