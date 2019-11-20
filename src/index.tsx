@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
 import './index.css';
-import App from './app';
+import AutocompleteApp from './autocomplete-app';
 
-render(<App />, document.getElementById('root'));
+render(<AutocompleteApp />, document.getElementById('root'));
