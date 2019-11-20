@@ -128,7 +128,7 @@ const AutocompleteApp = () => {
             getOptionDisabled={option => (!option.LevelId)}
             style={{ width: 333 }}
             renderInput={params => (
-              <TextField {...params} placeholder="Combo box" variant="outlined" fullWidth />
+              <TextField {...params} label="Combo box" variant="outlined" fullWidth />
             )}
             renderOption={(option) => {
               if (option.IsLeveled && option.LevelId) {
