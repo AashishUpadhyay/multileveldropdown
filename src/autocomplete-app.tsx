@@ -3,6 +3,18 @@ import { Typography } from "@material-ui/core";
 import Grid from '@material-ui/core/Grid';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    nestedModules: {
+      paddingLeft: theme.spacing(2),
+    },
+    nestedLevels: {
+      paddingLeft: theme.spacing(4),
+    },
+  }),
+);
 
 export interface IMultilevelDropdownOption {
   Id: number;
@@ -17,6 +29,7 @@ export interface Target {
   ModuleId: number;
   ModuleName: string;
   IsLeveled: boolean;
+  Type: string;
 }
 
 const multilevelDropdownOptions: IMultilevelDropdownOption[] = [
@@ -28,7 +41,7 @@ const multilevelDropdownOptions: IMultilevelDropdownOption[] = [
       {
         Id: 126,
         Name: "Vulnerability Library",
-        Type: "",
+        Type: "Application",
         Children: []
       }
     ]
@@ -38,9 +51,9 @@ const multilevelDropdownOptions: IMultilevelDropdownOption[] = [
     Name: "Policies Library",
     Type: "Application",
     Children: [
-      { Id: 3, Name: "Policy", Type: "", Children: [] },
-      { Id: 4, Name: "Area", Type: "", Children: [] },
-      { Id: 5, Name: "Section", Type: "", Children: [] }
+      { Id: 3, Name: "Policy", Type: "Application", Children: [] },
+      { Id: 4, Name: "Area", Type: "Application", Children: [] },
+      { Id: 5, Name: "Section", Type: "Application", Children: [] }
     ]
   },
   {
@@ -51,7 +64,7 @@ const multilevelDropdownOptions: IMultilevelDropdownOption[] = [
       {
         Id: 41,
         Name: "Control Standards",
-        Type: "",
+        Type: "Application",
         Children: []
       }
     ]
@@ -64,7 +77,7 @@ const multilevelDropdownOptions: IMultilevelDropdownOption[] = [
       {
         Id: 335,
         Name: "ARCHER-68342",
-        Type: "",
+        Type: "Application",
         Children: []
       }
     ]
@@ -77,9 +90,32 @@ const multilevelDropdownOptions: IMultilevelDropdownOption[] = [
       {
         Id: 337,
         Name: "Containers",
-        Type: "",
+        Type: "Application",
         Children: []
       }
+    ]
+  },
+  {
+    Id: 9817,
+    Name: "Vulnerability Library Assessment",
+    Type: "Questionnaire",
+    Children: [
+      {
+        Id: 12676,
+        Name: "Vulnerability Library Assessment",
+        Type: "Questionnaire",
+        Children: []
+      }
+    ]
+  },
+  {
+    Id: 6235,
+    Name: "Policies Assessment",
+    Type: "Questionnaire",
+    Children: [
+      { Id: 23, Name: "Policy Assessment", Type: "Questionnaire", Children: [] },
+      { Id: 344, Name: "Area Assessment", Type: "Questionnaire", Children: [] },
+      { Id: 25, Name: "Section Assessment", Type: "Questionnaire", Children: [] }
     ]
   }
 ];
@@ -95,7 +131,8 @@ export const composeOptions = (
         {
           IsLeveled: isLeveled,
           ModuleId: option.Id,
-          ModuleName: option.Name
+          ModuleName: option.Name,
+          Type: option.Type
         }
       );
     }
@@ -106,7 +143,8 @@ export const composeOptions = (
           ModuleId: option.Id,
           ModuleName: option.Name,
           LevelId: child.Id,
-          LevelName: child.Name
+          LevelName: child.Name,
+          Type: option.Type
         }
       )
     );
@@ -115,6 +153,7 @@ export const composeOptions = (
 };
 
 const AutocompleteApp = () => {
+  const classes = useStyles();
   var options = composeOptions(multilevelDropdownOptions);
   return (
     <div>
@@ -124,6 +163,7 @@ const AutocompleteApp = () => {
           <Autocomplete
             id="combo-box-demo"
             options={options}
+            groupBy={(option) => option.Type}
             getOptionLabel={option => (option.LevelName || option.ModuleName)}
             getOptionDisabled={option => (!option.LevelId)}
             style={{ width: 333 }}
@@ -133,13 +173,14 @@ const AutocompleteApp = () => {
             renderOption={(option) => {
               if (option.IsLeveled && option.LevelId) {
                 return (<React.Fragment>
-                  <span>&nbsp;&nbsp;</span>
-                  {(option.LevelName || option.ModuleName)}
+                  <span className={classes.nestedLevels}>
+                    {(option.LevelName || option.ModuleName)}</span>
                 </React.Fragment>);
               }
               else {
                 return (<React.Fragment>
-                  {(option.LevelName || option.ModuleName)}
+                  <span className={classes.nestedModules}>
+                    {(option.LevelName || option.ModuleName)}</span>
                 </React.Fragment>);
               }
             }
